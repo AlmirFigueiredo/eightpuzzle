@@ -14,6 +14,7 @@ class PuzzleSolver:
                 return result, nodes_expanded
             depth += 1
 
+
     def dls(self, state: PuzzleState, limit: int, visited: Set[PuzzleState]) -> Tuple[Optional[List[str]], int]:
         nodes_expanded: int = 0
         if state.is_goal():
@@ -35,18 +36,5 @@ class PuzzleSolver:
     def solve(self) -> Tuple[List[str], int, int]:
         result_path, nodes_expanded = self.iddfs()
         return result_path, len(result_path), nodes_expanded
-        
-        # print("Initial State:")
-        # self.initial_state.print_state()
-        # current_state: PuzzleState = self.initial_state
-        # print("IDDFS Solution:")
-        # if result_path:
-        #     for move in result_path:
-        #         print(f"Move: {move}")
-        #         current_state = current_state.apply_move(move)
-        #         current_state.print_state()
-        # else:
-        #     print("Solution Not Found.")
-        # print("Depth:", len(result_path) if result_path else 0)
-        # print("Expanded Nodes:", nodes_expanded)
+    
 
