@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Set
 
 class PuzzleState:
     def __init__(self, tiles: List[List[int]]):
@@ -20,8 +20,7 @@ class PuzzleState:
                     return i, j
         raise ValueError("Empty Space Not Found.")
 
-    def get_successors(self) -> List[Tuple[PuzzleState, str]]:
-        successors: List[Tuple[PuzzleState, str]] = []
+    def get_successors(self) -> List[str]:
         i, j = self.find_empty_space()
         directions: List[Tuple[int, int, str]] = [
             (-1, 0, 'Up'),
@@ -29,16 +28,14 @@ class PuzzleState:
             (0, -1, 'Left'),
             (0, 1, 'Right')
         ]
+        valid_moves: List[str] = []
         for delta_i, delta_j, move in directions:
             new_i, new_j = i + delta_i, j + delta_j
             if 0 <= new_i < 3 and 0 <= new_j < 3:
-                new_tiles: List[List[int]] = [row[:] for row in self.tiles] 
-                new_tiles[i][j], new_tiles[new_i][new_j] = new_tiles[new_i][new_j], new_tiles[i][j] 
-                successor_state: PuzzleState = PuzzleState(new_tiles)
-                successors.append((successor_state, move))
-        return successors
+                valid_moves.append(move)
+        return valid_moves
 
-    def apply_move(self, move: str) -> PuzzleState:
+    def apply_move_inplace(self, move: str) -> None:
         i, j = self.find_empty_space()
         possible_moves: dict[str, Tuple[int, int]] = {
             'Up': (-1, 0),
@@ -50,13 +47,21 @@ class PuzzleState:
             raise ValueError(f"Invalid move: {move}")
         delta_i, delta_j = possible_moves[move]
         new_i, new_j = i + delta_i, j + delta_j
-        if 0 <= new_i < 3 and 0 <= new_j < 3:
-            new_tiles: List[List[int]] = [row[:] for row in self.tiles]   
-            new_tiles[i][j], new_tiles[new_i][new_j] = new_tiles[new_i][new_j], new_tiles[i][j] #shift
-            return PuzzleState(new_tiles)
+        if 0 <= new_i < 3 and 0 <= new_j < 3: 
+            self.tiles[i][j], self.tiles[new_i][new_j] = self.tiles[new_i][new_j], self.tiles[i][j]
         else:
             raise ValueError("Invalid State.")
 
+    def undo_move_inplace(self, move: str) -> None:
+        reverse_moves: dict[str, str] = {
+            'Up': 'Down',
+            'Down': 'Up',
+            'Left': 'Right',
+            'Right': 'Left'
+        }
+        reverse_move = reverse_moves[move]
+        self.apply_move_inplace(reverse_move)
+        
     def print_state(self) -> None:
         print('-------------')
         for row in self.tiles:

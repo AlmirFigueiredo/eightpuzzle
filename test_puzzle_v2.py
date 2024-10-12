@@ -1,8 +1,8 @@
 import unittest
 from typing import List
 
-from version1.puzzle_solver import PuzzleSolver
-from version1.puzzle_state import PuzzleState
+from version2.puzzle_solver import PuzzleSolver
+from version2.puzzle_state import PuzzleState
 
 goal_state: List[List[int]] = [
     [1, 2, 3],
@@ -31,7 +31,7 @@ class TestPuzzleSolver(unittest.TestCase):
         self.assertEqual(result_path, expected_result_path, f"Erro: O result path esperado {expected_result_path}, mas foi {result_path}.")
         current_state = initial_state
         for move in result_path:
-            current_state = current_state.apply_move(move)
+            current_state.apply_move_inplace(move)  
         
         self.assertEqual(current_state.tiles, goal_state, "Erro: O estado final não corresponde ao estado objetivo.")
 
@@ -54,7 +54,7 @@ class TestPuzzleSolver(unittest.TestCase):
         self.assertEqual(result_path, expected_result_path, f"Erro: O result path esperado {expected_result_path}, mas foi {result_path}.")
         current_state = initial_state
         for move in result_path:
-            current_state = current_state.apply_move(move)
+            current_state.apply_move_inplace(move)  
         
         self.assertEqual(current_state.tiles, goal_state, "Erro: O estado final não corresponde ao estado objetivo.")
 
@@ -80,14 +80,7 @@ class TestPuzzleSolver(unittest.TestCase):
         self.assertEqual(nodes_expanded, expected_nodes_expanded, f"Erro: O Node Expanded esperado {expected_nodes_expanded}, mas foi {nodes_expanded}.")
         current_state = initial_state
         for move in result_path:
-            current_state = current_state.apply_move(move)
-        
-        self.assertEqual(current_state.tiles, goal_state, "Erro: O estado final não corresponde ao estado objetivo.")
-        
-        current_state = initial_state
-        
-        for move in result_path:
-            current_state = current_state.apply_move(move)
+            current_state.apply_move_inplace(move)  
         
         self.assertEqual(current_state.tiles, goal_state, "Erro: O estado final não corresponde ao estado objetivo.")
 
@@ -112,16 +105,8 @@ class TestPuzzleSolver(unittest.TestCase):
         self.assertEqual(result_path, expected_result_path, f"Erro: O result path esperado {expected_result_path}, mas foi {result_path}.")
         self.assertEqual(nodes_expanded, expected_nodes_expanded, f"Erro: O Node Expanded esperado {expected_nodes_expanded}, mas foi {nodes_expanded}.")
         current_state = initial_state
-        
         for move in result_path:
-            current_state = current_state.apply_move(move)
-        
-        self.assertEqual(current_state.tiles, goal_state, "Erro: O estado final não corresponde ao estado objetivo.")
-        
-        current_state = initial_state
-        
-        for move in result_path:
-            current_state = current_state.apply_move(move)
+            current_state.apply_move_inplace(move)  
         
         self.assertEqual(current_state.tiles, goal_state, "Erro: O estado final não corresponde ao estado objetivo.")
 
@@ -138,24 +123,16 @@ class TestPuzzleSolver(unittest.TestCase):
         
         result_path, depth, nodes_expanded = solver.solve()
         
-        expected_result_path = ['Left', 'Down', 'Right', 'Up', 'Up', 'Right', 'Down', 'Down', 'Left', 'Up', 'Left', 'Down', 'Right', 'Right']        #expected_depth = 26
-        expected_nodes_expanded = 3723
+        expected_result_path = ['Left', 'Down', 'Right', 'Up', 'Up', 'Right', 'Down', 'Down', 'Left', 'Up', 'Left', 'Down', 'Right', 'Right']
         expected_depth = 14
+        expected_nodes_expanded = 3723
         
         self.assertEqual(depth, expected_depth, f"Erro: Profundidade esperada {expected_depth}, mas foi {depth}.")
         self.assertEqual(result_path, expected_result_path, f"Erro: O result path esperado {expected_result_path}, mas foi {result_path}.")
         self.assertEqual(nodes_expanded, expected_nodes_expanded, f"Erro: O Node Expanded esperado {expected_nodes_expanded}, mas foi {nodes_expanded}.")
-        
         current_state = initial_state
         for move in result_path:
-            current_state = current_state.apply_move(move)
-        
-        self.assertEqual(current_state.tiles, goal_state, "Erro: O estado final não corresponde ao estado objetivo.")
-        
-        current_state = initial_state
-        
-        for move in result_path:
-            current_state = current_state.apply_move(move)
+            current_state.apply_move_inplace(move)  
         
         self.assertEqual(current_state.tiles, goal_state, "Erro: O estado final não corresponde ao estado objetivo.")
 
